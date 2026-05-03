@@ -1,43 +1,87 @@
-# Dataset Description
+# Store Sales Forecasting
 
-In this assignment, you will be predicting the unit sales for thousands of items sold at different client-owned stores located in Equador. The training data includes dates, store and item information, whether that item was being promoted, as well as the unit sales. Additional files include supplementary information that may be useful in building your models.
+Predicting unit sales for thousands of items sold at Ecuadorian stores.
 
-## File Descriptions and Data Field Information
+---
 
-### train.csv
+## Getting Started
 
-* Training data, which includes the target `unit_sales` by date, `store_nbr`, and `item_nbr` and a unique `id` to label rows.
-* The target `unit_sales` can be integer (e.g., a bag of chips) or float (e.g., 1.5 kg of cheese).
-* Negative values of `unit_sales` represent returns of that particular item.
-* The `onpromotion` column tells whether that `item_nbr` was on promotion for a specified `date` and `store_nbr`.
-* Approximately 16% of the `onpromotion` values in this file are `NaN`.
+### 1. Get the data
 
-### stores.csv
+The CSV input files are large and not stored in this repo. Download the compressed data files (.7z) from the link below and place them in the `7z/` folder:
 
-* Store metadata, including `city`, `state`, `type`, and `cluster`.
-* `cluster` is a grouping of similar stores.
+> **Data download link:** _(to be added)_
 
-### items.csv
+### 2. Extract the CSVs
 
-* Item metadata, including `family`, `class`, and `perishable`.
-* **NOTE**: Items marked as `perishable` have a score weight of `1.25`; otherwise, the weight is `1.0`.
+Install [7-Zip](https://www.7-zip.org/) (or `p7zip` on macOS/Linux), then extract all archives into the project root:
 
-### transactions.csv
+```bash
+# macOS
+brew install p7zip
 
-* The count of sales transactions for each `date`, `store_nbr` combination. Only included for the training data timeframe.
+# Extract all
+cd 7z/
+for f in *.7z; do 7z e "$f" -o../; done
+```
 
-### oil.csv
+After extraction, the root directory should contain:
+```
+train.csv
+transactions.csv
+items.csv
+stores.csv
+oil.csv
+holidays_events.csv
+```
 
-* Daily oil price.
+### 3. Install dependencies
 
-### holidays_events.csv
+```bash
+pip install pandas seaborn matplotlib scikit-learn statsmodels pmdarima xgboost
+```
 
-* Holidays and Events, with metadata
-* **NOTE**: Pay special attention to the transferred column. A holiday that is transferred officially falls on that calendar day, but was moved to another date by the government. A transferred day is more like a normal day than a holiday. To find the day that it was actually celebrated, look for the corresponding row where type is Transfer. For example, the holiday Independencia de Guayaquil was transferred from 2012-10-09 to 2012-10-12, which means it was celebrated on 2012-10-12. Days that are type Bridge are extra days that are added to a holiday (e.g., to extend the break across a long weekend). These are frequently made up by the type Work Day which is a day not normally scheduled for work (e.g., Saturday) that is meant to payback the Bridge.
-* Additional holidays are days added a regular calendar holiday, for example, as typically happens around Christmas (making Christmas Eve a holiday).
+### 4. Run the notebook
+
+Open `candidate.2.ipynb` in Jupyter and run all cells.
+
+```bash
+jupyter notebook candidate.2.ipynb
+```
+
+---
+
+## Dataset Description
+
+Predict `unit_sales` for thousands of items sold at different stores in Ecuador. Training data includes dates, store and item information, promotion status, and unit sales. Additional files provide supplementary information for feature engineering.
+
+### File Descriptions
+
+#### `train.csv`
+- Target column: `unit_sales` by `date`, `store_nbr`, and `item_nbr`
+- `unit_sales` can be integer or float (e.g., 1.5 kg of cheese)
+- Negative values represent returns
+- `onpromotion` indicates whether an item was on promotion (~16% are NaN)
+
+#### `stores.csv`
+- Store metadata: `city`, `state`, `type`, `cluster`
+- `cluster` is a grouping of similar stores
+
+#### `items.csv`
+- Item metadata: `family`, `class`, `perishable`
+- Perishable items have a score weight of 1.25; others are 1.0
+
+#### `transactions.csv`
+- Count of sales transactions per `date` and `store_nbr` (training period only)
+
+#### `oil.csv`
+- Daily oil price (Ecuador's economy is oil-dependent)
+
+#### `holidays_events.csv`
+- Holidays and events with metadata
+- **Transferred** holidays officially fall on a date but were moved by the government — treat as normal days
+- **Bridge** days extend holidays across long weekends, offset by **Work Day** entries
 
 ### Additional Notes
-
-* Wages in the public sector are paid every two weeks on the 15 th and on the last day of the month. Supermarket sales could be affected by this.
-* A magnitude 7.8 earthquake struck Ecuador on April 16, 2016. People rallied in relief efforts donating water and other first need products which greatly affected supermarket sales for several weeks after the earthquake.
-
+- Public sector wages are paid on the 15th and last day of each month — expect sales spikes
+- A magnitude 7.8 earthquake hit Ecuador on April 16, 2016, causing unusual sales patterns for several weeks
