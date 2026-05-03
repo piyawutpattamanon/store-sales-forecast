@@ -4,6 +4,46 @@ Predicting unit sales for thousands of items sold at Ecuadorian stores.
 
 ---
 
+## Solution Overview
+
+**Main notebook:** [`candidate.2.ipynb`](candidate.2.ipynb)
+
+### Approach
+
+Due to compute constraints, the solution focuses on a single representative item-store time series as a proof of concept.
+
+**EDA findings:**
+- Strong weekly seasonality in unit sales
+- Promotion status and day-of-week are the most influential features
+- No meaningful monthly or yearly seasonality detected
+- The late-2016 sales spike is driven by promotion activity, not seasonality or oil price
+
+**Feature engineering:**
+- Day-of-week, day-of-month, month-of-year (one-hot encoded)
+- Daily oil price (forward-filled for gaps)
+- Promotion status
+- 7-day and 30-day lagged moving averages
+
+**Models trained:**
+- **SARIMAX** — captures time series structure and weekly seasonality; hyperparameters tuned with `auto_arima`
+- **XGBoost** — captures non-linear relationships across all engineered features; tuned with `GridSearchCV`
+- **Ensemble** — simple average of tuned SARIMAX and tuned XGBoost
+- **Baseline** — 30-day moving average
+
+### Results (3-fold cross-validation RMSE)
+
+| Model | RMSE |
+|---|---|
+| **Ensemble** | **7.01** |
+| Tuned XGBoost | 7.32 |
+| Tuned SARIMAX | 7.33 |
+| Untuned XGBoost | 8.14 |
+| MA30 Baseline | 8.43 |
+
+All models outperform the baseline. Hyperparameter tuning significantly improves XGBoost. Ensembling reduces RMSE further beyond individual models.
+
+---
+
 ## Getting Started
 
 ### 1. Get the data
