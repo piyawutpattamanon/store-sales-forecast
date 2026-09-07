@@ -105,6 +105,21 @@ In this assignment, you will be predicting the unit sales for thousands of items
 * Store metadata, including `city`, `state`, `type`, and `cluster`.
 * `cluster` is a grouping of similar stores.
 
+```csv
+store_nbr,city,state,type,cluster
+1,Quito,Pichincha,D,13
+2,Quito,Pichincha,D,13
+3,Quito,Pichincha,D,8
+4,Quito,Pichincha,D,9
+5,Santo Domingo,Santo Domingo de los Tsachilas,D,4
+```
+
+
+### items.csv
+
+* Item metadata, including `family`, `class`, and `perishable`.
+* **NOTE**: Items marked as `perishable` have a score weight of `1.25`; otherwise, the weight is `1.0`.
+
 * Example Rwos
 ```csv
 item_nbr,family,class,perishable
@@ -114,11 +129,6 @@ item_nbr,family,class,perishable
 103520,GROCERY I,1028,0
 103665,BREAD/BAKERY,2712,1
 ```
-
-### items.csv
-
-* Item metadata, including `family`, `class`, and `perishable`.
-* **NOTE**: Items marked as `perishable` have a score weight of `1.25`; otherwise, the weight is `1.0`.
 
 ### transactions.csv
 
